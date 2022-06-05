@@ -1,4 +1,3 @@
-import { useState } from "react";
 import s from "./UserDetails.module.scss";
 import moment from "moment";
 
@@ -6,14 +5,16 @@ import { useQuery } from "react-query";
 import { getUser, getUserRepos } from "../../api/users";
 import { useParams } from "react-router";
 import { DATE_FORMAT } from "../../constants/date";
+import { useSearchParams } from "react-router-dom";
 
 export default function UserDetails() {
-  const [searchText, setSearchText] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const repo = searchParams.get("repo") || "";
   const { login = "" } = useParams();
-  const { data: user } = useQuery([`User ${login}`], () => getUser(login));
 
-  const { data: repos } = useQuery([`${login} repos'`, searchText], () =>
-    getUserRepos(login, searchText)
+  const { data: user } = useQuery([`User ${login}`], () => getUser(login));
+  const { data: repos } = useQuery([`${login} repos'`, repo], () =>
+    getUserRepos(login, repo)
   );
 
   const joinDate = moment(user?.created_at).format(DATE_FORMAT);
@@ -31,7 +32,7 @@ export default function UserDetails() {
         </div>
       </div>
       <div className={s.bio}>{user?.bio}</div>
-      <input onChange={(e) => setSearchText(e.target.value)} />
+      <input onChange={(e) => setSearchParams({ repo: e.target.value })} />
       {repos?.map(({ name, forks, stargazers_count, html_url }) => (
         <a
           href={html_url}

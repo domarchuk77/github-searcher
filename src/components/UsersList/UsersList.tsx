@@ -1,19 +1,18 @@
-import { useState } from "react";
-
 import s from "./UsersList.module.scss";
 
 import { useQuery } from "react-query";
 import { getUsers } from "../../api/users";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export default function UsersList() {
-  const [searchText, setSearchText] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const user = searchParams.get("user") || "";
 
-  const { data } = useQuery(["Users", searchText], () => getUsers(searchText));
+  const { data } = useQuery(["Users", user], () => getUsers(user));
 
   return (
     <div>
-      <input onChange={(e) => setSearchText(e.target.value)} />
+      <input onChange={(e) => setSearchParams({ user: e.target.value })} />
       {data?.map(({ avatar_url, id, login }) => (
         <Link to={login} key={id} className={s.link}>
           <img
