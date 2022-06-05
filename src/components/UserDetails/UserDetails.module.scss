@@ -1,0 +1,28 @@
+.link {
+  text-decoration: none;
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #000;
+  padding: 2px;
+  margin: 2px;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 200px;
+  margin: 0 10px 0 0;
+}
+
+.info {
+  text-align: left;
+}
+
+.bio {
+  margin: 10px 0 20px 0;
+}
